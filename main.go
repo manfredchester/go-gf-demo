@@ -1,7 +1,6 @@
 package main
 
 import (
-	"cloudali/plugin/logs"
 	"flag"
 	"fmt"
 	"protocol"
@@ -38,12 +37,12 @@ func main() {
 }
 
 func InitCrontab() {
-	logs.Info("begin init crontab")
+	fmt.Println("begin init crontab")
 	crontable := cron.New()
 	// golang 6位 精确秒
 	spec := `0 0 0 * * ?`
 	crontable.AddFunc(spec, func() {
-		logs.Info("crontab sync and check running...")
+		fmt.Println("crontab sync and check running...")
 	})
 
 	crontable.AddFunc(spec, funcName)
