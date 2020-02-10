@@ -32,7 +32,6 @@ func main() {
 	service.Init()
 	//Register Restful Handler
 	service.Handle("/", GetRouterContainer())
-	// Crontab
 	InitCrontab()
 }
 

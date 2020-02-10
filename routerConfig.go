@@ -44,50 +44,6 @@ func cloudBillRouterConf() {
 	methodPath = "QueryAccount"
 	ws.Route(ws.POST(rootPath + methodPath).To(cloudBill.QueryAccount))
 
-	methodPath = "NewAccount"
-	ws.Route(ws.POST(rootPath + methodPath).To(cloudBill.NewAccount))
-
-	methodPath = "UpdateAccount"
-	ws.Route(ws.POST(rootPath + methodPath).To(cloudBill.UpdateAccount))
-
-	methodPath = "DeleteAccount"
-	ws.Route(ws.POST(rootPath + methodPath).To(cloudBill.DeleteAccount))
-
-	methodPath = "QueryCpp"
-	ws.Route(ws.POST(rootPath + methodPath).To(cloudBill.QueryCpp))
-
-	methodPath = "NewCpp"
-	ws.Route(ws.POST(rootPath + methodPath).To(cloudBill.NewCpp))
-
-	methodPath = "UpdateCpp"
-	ws.Route(ws.POST(rootPath + methodPath).To(cloudBill.UpdateCpp))
-
-	methodPath = "DeleteCpp"
-	ws.Route(ws.POST(rootPath + methodPath).To(cloudBill.DeleteCpp))
-
-	methodPath = "CheckAccount"
-	ws.Route(ws.POST(rootPath + methodPath).To(cloudBill.CheckAccount))
-
-	methodPath = "BillAnalysis"
-	ws.Route(ws.POST(rootPath + methodPath).To(cloudBill.BillAnalysis))
-
-	methodPath = "BillImport"
-	ws.Route(ws.POST(rootPath + methodPath).To(cloudBill.BillImport))
-
-	methodPath = "IsBillSuper"
-	ws.Route(ws.POST(rootPath + methodPath).To(cloudBill.IsSuper))
-
-	methodPath = "BillDetail"
-	ws.Route(ws.POST(rootPath + methodPath).To(cloudBill.BillDetail))
-
-	methodPath = "BillDelete"
-	ws.Route(ws.POST(rootPath + methodPath).To(cloudBill.BillDelete))
-
-	methodPath = "InitDataTime"
-	ws.Route(ws.POST(rootPath + methodPath).To(cloudBill.InitDataTime))
-
-	methodPath = "HasLinkApp"
-	ws.Route(ws.GET(rootPath + methodPath).To(cloudBill.HasLinkApp))
 }
 
 func cmdbRouterConf() {
