@@ -1,0 +1,39 @@
+[server]
+    Address =":8199"
+    ServerAgent= "go-gf-demo"
+    LogPath="./log/server"
+
+title = "TOML 例子"
+
+[db]
+    [[db.def]]
+        host     = "127.0.0.1"
+        port     = "11232"
+        user     = "root"
+        pass     = "qwe123!@#"
+        name     = "cloudproject"
+        type     = "mysql"
+        role     = "master"
+        charset  = "utf8"
+        priority = "1"
+
+[database]
+    [database.defaultdemo]
+        link = "mysql:root:qwe123!@#@tcp(127.0.0.1:3306)/cloudproject"
+        role         = "master"
+        # debug        = "false"
+        debug        = "true"
+        # 空跑特性 结合调试模式和日志输出一起使用
+        dryrun       = 0
+        weight       = "100"
+        prefix       = ""
+        charset      = "utf8"
+        linkinfo     = ""
+        maxIdle      = "10"
+        maxOpen      = "100"
+        maxLifetime  = "30"
+    [database.logger]
+        Path   = "./log/dbsql"
+        Level  = "all"
+        Stdout = false
+        # { "database": { "logger": { "Stdout": false } } }
