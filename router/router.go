@@ -9,10 +9,10 @@ import (
 )
 
 func init() {
-	s := g.Server()
+	S := g.Server()
 
 	// 分组路由注册方式
-	s.Group("/", func(group *ghttp.RouterGroup) {
+	S.Group("/", func(group *ghttp.RouterGroup) {
 		group.Middleware(
 			service.Middleware.Ctx,
 		)
@@ -23,8 +23,9 @@ func init() {
 				service.Middleware.Auth,
 			)
 			// 两个group含义是什么
+			// 为什么是重复注册了？
 			group.ALL("/user/profile", api.User.Profile)
 		})
 	})
-	s.Run()
+	// s.Run()
 }

@@ -1,8 +1,12 @@
 package main
 
-import "time"
+import (
+	_ "go-gf-demo/router"
+
+	"github.com/gogf/gf/frame/g"
+)
 
 func main() {
-	cfgDemo()
-	<-time.After(time.Second * 100)
+	g.Server().Run()
+	// <-time.After(time.Second * 100)
 }
