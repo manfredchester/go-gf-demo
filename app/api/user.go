@@ -1,7 +1,9 @@
 package api
 
 import (
+	"go-gf-demo/app/model"
 	"go-gf-demo/app/service"
+	"go-gf-demo/library/response"
 
 	"github.com/gogf/gf/net/ghttp"
 )
@@ -10,32 +12,20 @@ var User = new(apiUser)
 
 type apiUser struct{}
 
+func (a *apiUser) SignIn(r *ghttp.Request) {
+	var data *model.ApiUserSignInReq
+	// 任意的解析出model.ApiUserSignInReq
+	if err := r.Parse(&data); err != nil {
+		response.JsonExit(r, 1, err.Error())
+	}
+	if err := service.User.SignIn(r.Context(), data.Passport, data.Password); err != nil {
+		response.JsonExit(r, 1, err.Error())
+	} else {
+		response.JsonExit(r, 0, "ok")
+	}
+}
+
 func (a *apiUser) Profile(r *ghttp.Request) {
 	service.User.GetProfile(r.Context())
 	// JsonExit(r, 0, "", service.User.GetProfile(r.Context()))
-}
-
-type JsonResponse struct {
-	Code    int         `json:"code"`    // 错误码((0:成功, 1:失败, >1:错误码))
-	Message string      `json:"message"` // 提示信息
-	Data    interface{} `json:"data"`    // 返回数据(业务接口定义具体数据结构)
-}
-
-// 标准返回结果数据结构封装。
-func Json(r *ghttp.Request, code int, message string, data ...interface{}) {
-	responseData := interface{}(nil)
-	if len(data) > 0 {
-		responseData = data[0]
-	}
-	r.Response.WriteJson(JsonResponse{
-		Code:    code,
-		Message: message,
-		Data:    responseData,
-	})
-}
-
-// 返回JSON数据并退出当前HTTP执行函数。
-func JsonExit(r *ghttp.Request, err int, msg string, data ...interface{}) {
-	Json(r, err, msg, data...)
-	r.Exit()
 }

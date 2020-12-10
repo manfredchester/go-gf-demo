@@ -16,6 +16,16 @@ title = "TOML 例子"
         role     = "master"
         charset  = "utf8"
         priority = "1"
+    [[db.def]]
+        host     = "127.111.0.1"
+        port     = "11232"
+        user     = "root"
+        pass     = "qwe123!@#"
+        name     = "cloudproject"
+        type     = "mysql"
+        role     = "master"
+        charset  = "utf8"
+        priority = "1"
 
 [database]
     [database.defaultdemo]
