@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-	g.Server().Run()
-	// g.Wait()
+	g.Wait()
 	// <-time.After(time.Second * 100)
 }

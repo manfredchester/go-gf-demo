@@ -33,6 +33,8 @@ func (e *serivceMiddleware) Ctx(r *ghttp.Request) {
 
 // 鉴权中间件，只有登录成功（model.user封装完成）之后才能通过
 func (e *serivceMiddleware) Auth(r *ghttp.Request) {
+	// 通过SetParam和GetParam来设置和获取自定义的变量，该变量生命周期仅限于当前请求流程
+	r.SetParam("site", "https://golang.org")
 	if User.IsSignedIn(r.Context()) {
 		r.Middleware.Next()
 	} else {
