@@ -125,4 +125,23 @@ func init() {
 	s1.Start()
 	s2.Start()
 	s3.Start()
+	server4()
+}
+
+func server4() {
+	s4 := g.Server("s4")
+	s4.Group("/upload", func(group *ghttp.RouterGroup) {
+		group.ALL("/", Upload)
+	})
+	s4.SetPort(8400)
+	s4.Start()
+}
+
+func Upload(r *ghttp.Request) {
+	file := r.GetUploadFiles("upload-file")
+	names, err := file.Save("./file/")
+	if err != nil {
+		r.Response.WriteExit(err)
+	}
+	r.Response.WriteExit("upload successfully:", names)
 }
