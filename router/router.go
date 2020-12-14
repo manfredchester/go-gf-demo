@@ -3,9 +3,11 @@ package router
 import (
 	"go-gf-demo/app/api"
 	"go-gf-demo/app/service"
+	"time"
 
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
+	"github.com/gogf/gf/os/gsession"
 	"github.com/gogf/gf/util/gvalid"
 )
 
@@ -95,6 +97,30 @@ func init() {
 				Data: req,
 			})
 		}
+	})
+	// cookie
+	s3.BindHandler("/setcookie", func(r *ghttp.Request) {
+		r.Cookie.Set("setcookiedata", "cookie data test set")
+		r.Response.Write("set done")
+	})
+	// server配置方式
+	// s3.SetConfigWithMap(g.Map{})
+	// 时间
+	s3.SetSessionMaxAge(time.Minute)
+	// 内存存储
+	s3.SetSessionStorage(gsession.NewStorageMemory())
+	s3.Group("/session", func(group *ghttp.RouterGroup) {
+		group.ALL("/set", func(r *ghttp.Request) {
+			r.Session.Set("sesssion data", "data sesssion test set")
+			r.Response.Write("set ok")
+		})
+		group.ALL("/get", func(r *ghttp.Request) {
+			r.Response.Write(r.Session.Map())
+		})
+		group.ALL("/del", func(r *ghttp.Request) {
+			r.Session.Clear()
+			r.Response.Write(r.Session.Map())
+		})
 	})
 	s1.Start()
 	s2.Start()
