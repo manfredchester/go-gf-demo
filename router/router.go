@@ -1,17 +1,23 @@
 package router
 
 import (
+	"fmt"
 	"go-gf-demo/app/api"
 	"go-gf-demo/app/service"
 	"time"
 
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
+	"github.com/gogf/gf/os/gfile"
+	"github.com/gogf/gf/os/glog"
+	"github.com/gogf/gf/os/gproc"
 	"github.com/gogf/gf/os/gsession"
 	"github.com/gogf/gf/util/gvalid"
 )
 
 func init() {
+	c := g.Cfg()
+	fmt.Println(c.SetFileName("configdemo.toml"))
 	s1 := g.Server("s1")
 	// URI_TYPE_DEFAULT  = 0 // （默认）全部转为小写，单词以'-'连接符号连接
 	// URI_TYPE_FULLNAME = 1 // 不处理名称，以原有名称构建成URI
@@ -93,6 +99,9 @@ func init() {
 				// Data:  nil,
 			})
 		} else {
+			// 获取cookie 信息
+			fmt.Println("Cookie:", r.Cookie.Map())
+			fmt.Println("Header:", r.Header.Get("Span_id"))
 			r.Response.WriteJsonExit(RegisterRes{
 				Data: req,
 			})
@@ -126,12 +135,18 @@ func init() {
 	s2.Start()
 	s3.Start()
 	server4()
+	server5()
+	// server6()
+	server7()
 }
 
 func server4() {
 	s4 := g.Server("s4")
 	s4.Group("/upload", func(group *ghttp.RouterGroup) {
 		group.ALL("/", Upload)
+	})
+	s4.BindStatusHandler(404, func(r *ghttp.Request) {
+		r.Response.RedirectTo("./client/conver.png")
 	})
 	s4.SetPort(8400)
 	s4.Start()
@@ -144,4 +159,65 @@ func Upload(r *ghttp.Request) {
 		r.Response.WriteExit(err)
 	}
 	r.Response.WriteExit("upload successfully:", names)
+}
+
+func server5() {
+	s5 := g.Server("s5")
+	s5.BindHandler("/ws", func(r *ghttp.Request) {
+		ws, err := r.WebSocket()
+		if err != nil {
+			glog.Error(err)
+			r.Exit()
+		}
+		for {
+			msgType, msg, err := ws.ReadMessage()
+			fmt.Println(msgType, msg)
+			if err != nil {
+				return
+			}
+			if err = ws.WriteMessage(msgType, []byte{'s'}); err != nil {
+				return
+			}
+		}
+	})
+	s5.SetServerRoot(gfile.MainPkgPath())
+	s5.SetPort(8500)
+	s5.Start()
+}
+
+func server6() {
+	s := g.Server()
+	s.BindHandler("/", func(r *ghttp.Request) {
+		r.Response.Writeln("哈喽！")
+	})
+	s.BindHandler("/pid", func(r *ghttp.Request) {
+		r.Response.Writeln(gproc.Pid())
+	})
+	s.BindHandler("/sleep", func(r *ghttp.Request) {
+		r.Response.Writeln(gproc.Pid())
+		time.Sleep(10 * time.Second)
+		r.Response.Writeln(gproc.Pid())
+	})
+	// E:\manfredchester\src\go-gf-demo\go-gf-demo.exe
+	ghttp.SetGraceful(true)
+	s.EnableAdmin()
+	s.EnablePProf()
+	s.SetPort(8600)
+	s.Start()
+}
+
+func server7() {
+	s := g.Server()
+	s.BindHookHandlerByMap("/hook", map[string]ghttp.HandlerFunc{
+		ghttp.HOOK_BEFORE_SERVE:  func(r *ghttp.Request) { glog.Println(ghttp.HOOK_BEFORE_SERVE) },
+		ghttp.HOOK_AFTER_SERVE:   func(r *ghttp.Request) { glog.Println(ghttp.HOOK_AFTER_SERVE) },
+		ghttp.HOOK_BEFORE_OUTPUT: func(r *ghttp.Request) { glog.Println(ghttp.HOOK_BEFORE_OUTPUT) },
+		ghttp.HOOK_AFTER_OUTPUT:  func(r *ghttp.Request) { glog.Println(ghttp.HOOK_AFTER_OUTPUT) },
+	})
+	s.BindHandler("/hook", func(r *ghttp.Request) {
+		glog.Println(r.RequestURI)
+		r.Response.Write("用户:", r.Get("name"), ", uid:", r.Get("uid"))
+	})
+	s.SetPort(8700)
+	s.Start()
 }

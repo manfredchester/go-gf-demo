@@ -55,10 +55,18 @@ func main() {
 		panic(err)
 	} else {
 		defer r.Close()
+		r.RawDump()
 		fmt.Println(r.ReadAllString())
 	}
 	// 返回content为string类型
 	fmt.Println("===========返回content为string类型============")
+	g.Client().SetCookieMap(g.MapStrStr{
+		"name":  "V",
+		"score": "sir",
+	})
+	g.Client().SetHeaderMap(g.MapStrStr{
+		"Span_id": "0.0.1",
+	})
 	content := g.Client().PostContent(
 		"http://127.0.0.1:8300/register",
 		`{"username":"john","password1":"123456","password2":"123456"}`,

@@ -30,7 +30,7 @@
     SessionPath         = "/tmp/gsessions"   # Session存储的文件目录路径。默认为当前系统临时目录下的gsessions目录
 
     # Logging配置
-    LogPath             = ""                 # 日志文件存储目录路径，建议使用绝对路径。默认为空，表示关闭
+    LogPath             = "./log/server"                 # 日志文件存储目录路径，建议使用绝对路径。默认为空，表示关闭
     LogStdout           = true               # 日志是否输出到终端。默认为true
     ErrorStack          = true               # 当Server捕获到异常时是否记录堆栈信息到日志中。默认为true
     ErrorLogEnabled     = true               # 是否记录异常日志信息到日志中。默认为true
